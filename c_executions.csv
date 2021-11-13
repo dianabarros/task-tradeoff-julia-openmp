@@ -1,0 +1,10 @@
+func,size,time
+linked,100,0.000036
+linked,1000,0.001967
+linked,10000,0.142134
+linked_for,100,0.000039
+linked_for,1000,0.000660
+linked_for,10000,0.067798
+linked_task,100,0.000215
+linked_task,1000,0.001861
+linked_task,10000,0.067551
