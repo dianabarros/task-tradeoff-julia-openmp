@@ -1,0 +1,18 @@
+# second run with 
+    4 threads,
+    sizes 100, 1000 and 1000, 
+    starting fib at 50, 
+    5x stride,
+    no prints and 
+    time in seconds
+
+func,size,time
+linked,100,2.71504e-5
+linked,1000,0.0022706
+linked,10000,0.22792655990000002
+linked_for,100,3.39896e-5
+linked_for,1000,0.0017002901000000002
+linked_for,10000,0.1044914701
+linked_task,100,0.00010338989999999999
+linked_task,1000,0.0014939099
+linked_task,10000,0.052108949700000004

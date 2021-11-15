@@ -7,7 +7,7 @@
 // #define N 30
 // #endif
 #ifndef FS
-#define FS 30
+#define FS 50
 #endif
 
 struct node {
@@ -60,7 +60,7 @@ struct node* init_list(int N,struct node* p) {
       temp  =  (struct node*)malloc(sizeof(struct node));
       p->next = temp;
       p = temp;
-      p->data = FS + i + 1;
+      p->data = FS + i * 10;
       p->fibdata = i+1;
    }
    p->next = NULL;

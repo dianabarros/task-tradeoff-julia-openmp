@@ -1,10 +1,4 @@
 func,size,time
-linked,100,14060.1
-linked,1000,977390.4
-linked,10000,8.92152704e7
-linked_for,100,23460.1
-linked_for,1000,361790.1
-linked_for,10000,2.537572e7
-linked_task,100,104910.2
-linked_task,1000,1.0564202e6
-linked_task,10000,2.31421601e7
+linked,100000,4.5552691001
+linked_for,100000,2.66334441
+linked_task,100000,2.0495111501

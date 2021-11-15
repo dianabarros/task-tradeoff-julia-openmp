@@ -43,7 +43,7 @@ function init_list(N::Int64, FS::Int64)
     head = Node(FS, 1, nothing)
     tmp = head
     for i in 1:N-1
-        node = Node(FS + i*2, i, nothing)
+        node = Node(FS + i*10, i, nothing)
         tmp.next = node
         tmp = node
     end
@@ -70,7 +70,7 @@ function linked_for(N::Int64, FS::Int64)
         p = p.next
     end
     benchmarks = @benchmark for_loop($vec_aux, $N) samples=benchmark_samples evals=benchmark_evals
-    print_list_for(vec_aux, N)
+    #print_list_for(vec_aux, N)
     return benchmarks
 end
 
@@ -123,7 +123,7 @@ function run_lists()
         for size in sizes
             println(now(), " - Running ", func, " function with size ", size)
             exec_times = func(size, fib_start).times
-            mean_time = sum(exec_times)/benchmark_samples
+            mean_time = (sum(exec_times)/benchmark_samples)/1e9 #nano to seconds
             push!(df, [string(func) size mean_time])
             CSV.write("julia_executions.csv",df)
             println(now(), " - CSV written.")
