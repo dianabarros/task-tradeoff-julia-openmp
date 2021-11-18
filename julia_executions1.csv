@@ -3,7 +3,7 @@
     starting fib at 50, 
     double stride,
     prints and 
-    time in nano seconds
+    time in nano seconds from benchmarktools
 
 
 func,size,time

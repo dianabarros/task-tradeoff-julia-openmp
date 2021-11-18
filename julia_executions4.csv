@@ -1,0 +1,21 @@
+# 4th run with 
+    4 threads,
+    sizes 100, 1000, 10000 and 100000, 
+    starting fib at 50, 
+    10x stride,
+    no prints and 
+    time in seconds from @timed
+
+func,size,time
+linked,Tiny,4.929979999999999e-5
+linked,Small,0.0047128501
+linked,Medium,0.4473218001
+linked_for,Tiny,0.0088730501
+linked_for,Small,0.0038794097
+linked_for,Medium,0.30508604010000007
+linked_task,Tiny,0.0009379998999999998
+linked_task,Small,0.0025049299000000002
+linked_task,Medium,0.15106979989999997
+linked,Large,28.7228231203
+linked_for,Large,27.975380189499997
+linked_task,Large,13.275210770000001

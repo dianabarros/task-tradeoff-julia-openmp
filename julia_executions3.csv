@@ -1,3 +1,11 @@
+# third run with 
+    4 threads,
+    sizes 100, 1000, 10000 and 100000, 
+    starting fib at 50, 
+    10x stride,
+    no prints and 
+    time in seconds from benchmarktools
+
 func,size,time
 linked,100,4.90196e-5
 linked,1000,0.0044756802

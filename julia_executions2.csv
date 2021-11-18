@@ -4,7 +4,7 @@
     starting fib at 50, 
     5x stride,
     no prints and 
-    time in seconds
+    time in seconds from benchmarktools
 
 func,size,time
 linked,100,2.71504e-5

@@ -1,13 +1,21 @@
+# first run with 
+    4 threads,
+    sizes 100, 1000, 10000 and 100000, 
+    starting fib at 50, 
+    10x stride,
+    no prints and 
+    time in seconds
+
 func,size,time
-linked,100,0.000024
-linked,1000,0.002057
-linked,10000,0.206465
-linked_for,100,0.000042
-linked_for,1000,0.001039
-linked_for,10000,0.096213
-linked_task,100,0.000180
-linked_task,1000,0.001605
-linked_task,10000,0.063236
-linked,100000,21.247713
-linked_for,100000,12.864341
-linked_task,100000,8.945339
+Sequential,Tiny,0.000024
+Sequential,Small,0.002057
+Sequential,Medium,0.206465
+Static,Tiny,0.000042
+Static,Small,0.001039
+Static,Medium,0.096213
+Dynamic,Tiny,0.000180
+Dynamic,Small,0.001605
+Dynamic,Medium,0.063236
+Sequential,Large,21.247713
+Static,Large,12.864341
+Dynamic,Large,8.945339
