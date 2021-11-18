@@ -69,9 +69,11 @@ function linked_for(N::Int64, FS::Int64)
         vec_aux[i] = p
         p = p.next
     end
-    benchmarks = @benchmark for_loop($vec_aux, $N) samples=benchmark_samples evals=benchmark_evals
+    # benchmarks = @benchmark for_loop($vec_aux, $N) samples=benchmark_samples evals=benchmark_evals
+    time = (@timed for_loop(vec_aux, N))[2]
     #print_list_for(vec_aux, N)
-    return benchmarks
+    # return benchmarks
+    return time
 end
 
 function print_list_tasks(p::Node)
@@ -93,10 +95,12 @@ end
 function linked_task(N::Int64, FS::Int64)
     head = init_list(N, FS)
     p = head
-    benchmarks = @benchmark task_loop($p) samples=benchmark_samples evals=benchmark_evals
+    # benchmarks = @benchmark task_loop($p) samples=benchmark_samples evals=benchmark_evals
+    time = (@timed task_loop(p))[2]
     p = head
     # print_list_tasks(p)
-    return benchmarks
+    # return benchmarks
+    return time
 end
 
 function seq_loop(p::Node)
@@ -109,24 +113,44 @@ end
 function linked(N::Int64, FS::Int64)
     head = init_list(N, FS)
     p = head
-    benchmarks = @benchmark seq_loop($p) samples=benchmark_samples evals=benchmark_evals
+    # benchmarks = @benchmark seq_loop($p) samples=benchmark_samples evals=benchmark_evals
+    time = (@timed seq_loop(p))[2]
     p = head
-    return benchmarks
+    # return benchmarks
+    return time
 end
 
 function run_lists()
-    sizes = [100, 1000, 10000]
+    sizes = [100000]
     fib_start = 50
     df = DataFrame(func=String[], size=Int64[], time=Float64[])
     funcs = [linked, linked_for, linked_task]
     for func in funcs
         for size in sizes
             println(now(), " - Running ", func, " function with size ", size)
-            exec_times = func(size, fib_start).times
-            mean_time = (sum(exec_times)/benchmark_samples)/1e9 #nano to seconds
+            # exec_times = func(size, fib_start).times
+            # mean_time = (sum(exec_times)/benchmark_samples)/1e9 #nano to seconds
+            total_time = 0
+            for _ in 1:benchmark_samples
+                total_time += func(size, fib_start)
+            end
+            mean_time = total_time/benchmark_samples
             push!(df, [string(func) size mean_time])
             CSV.write("julia_executions.csv",df)
             println(now(), " - CSV written.")
         end
     end
 end
+
+# df |>
+#        @vlplot(
+#            :bar,
+#            x={"func:n", title="Scheduling", axis=false, sort=["Sequential", "Static", "Dynamic"]},
+#            y={"time:q", scale={type="log",base=20}, axis={grid=false}, title="Time (s)"},
+#            column={"size:n", title="Size",sort=["Small","Medium","Large"]},
+#                config={
+#                view={stroke=:transparent},
+#                axis={domainWidth=1},
+#            },
+#            color={"func:n", title="Scheduling", scale={range=["#e7ba52","#1f77b4","#9467bd"]}, sort=["Sequential", "Static", "Dynamic"]}
+#            )
