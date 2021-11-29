@@ -154,3 +154,33 @@ end
 #            },
 #            color={"func:n", title="Scheduling", scale={range=["#e7ba52","#1f77b4","#9467bd"]}, sort=["Sequential", "Static", "Dynamic"]}
 #            )
+
+
+
+# df |>
+#               @vlplot(
+#                   :bar,
+#                   title={text="Linked List Execution Times", anchor="middle", fontSize=20},
+#                   x={"func:n", title="Scheduling", axis=false, sort=["Static", "Dynamic"]},
+#                   y={"time:q", scale={type="log",base=20}, axis={grid=false, titleFontSize=14}, title="Time (s)"},
+#                   column={"size:n",
+#                           title="Size",
+#                           sort=["Small","Medium","Large"],
+#                           header={labelOrient="bottom", titleOrient="bottom", titleFontSize=14, labelFontSize=12}
+#                    },
+#                   config={
+#                       view={stroke=:transparent},
+#                       axis={domainWidth=1},
+#                   },
+#                   color={"func:n",
+#                          title="Scheduling",
+#                          axis={titleFontSize=14},
+#                          scale={range=["#e7ba52","#1f77b4","#9467bd"]},
+#                          sort=["Static", "Dynamic"],
+#                          legend={titleFontSize=14,
+#                                  labelFontSize=12
+#                          }
+#                    },
+#                   width=70,
+#                   height=190
+#                   )
