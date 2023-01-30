@@ -1,7 +1,10 @@
-using Base.Threads
-using BenchmarkTools, DataFrames, CSV, Dates
+using Pkg
+Pkg.activate(".")
 
-const benchmark_samples = 10
+using Base.Threads
+using BenchmarkTools, DataFrames, CSV, Dates, Statistics
+
+const benchmark_samples = 2
 const benchmark_evals = 1
 
 mutable struct Node
@@ -121,22 +124,22 @@ function linked(N::Int64, FS::Int64)
 end
 
 function run_lists()
-    sizes = [100000]
+    sizes = [1000,10000,100000]
     fib_start = 50
     df = DataFrame(func=String[], size=Int64[], time=Float64[])
     funcs = [linked, linked_for, linked_task]
+    run_times = []
     for func in funcs
         for size in sizes
             println(now(), " - Running ", func, " function with size ", size)
             # exec_times = func(size, fib_start).times
             # mean_time = (sum(exec_times)/benchmark_samples)/1e9 #nano to seconds
-            total_time = 0
             for _ in 1:benchmark_samples
-                total_time += func(size, fib_start)
+                push!(run_times, func(size, fib_start))
             end
-            mean_time = total_time/benchmark_samples
+            mean_time = mean(run_times)
             push!(df, [string(func) size mean_time])
-            CSV.write("julia_executions.csv",df)
+            CSV.write("julia_executions_t$(nthreads()).csv",df)
             println(now(), " - CSV written.")
         end
     end
@@ -184,3 +187,4 @@ end
 #                   width=70,
 #                   height=190
 #                   )
+run_lists()
