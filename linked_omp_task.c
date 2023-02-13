@@ -89,9 +89,20 @@ int main(int argc, char *argv[]) {
    // printf("  Cada no da linked list sera processado pela funcao 'processwork()'\n");
    // printf("  Cada no ira computar %d numeros de fibonacci comecando por %d\n",N,FS);      
 
+   double task_start, task_end;
+   double task_number;
+   double max_task_time;
+   double cum_task_time;
+   double mean_task_time;
+   double task_time;
+   double imbalance;
    for(int i=0; i<runs; i++) {
       p = init_list(N, p);
       head = p;
+
+      task_number = 0.0;
+      max_task_time = 0.0;
+      cum_task_time = 0.0;
 
       gettimeofday(&tstart, NULL);
       
@@ -108,7 +119,17 @@ int main(int argc, char *argv[]) {
                #pragma omp task firstprivate(p)
                #endif
                {
-               processwork(p);
+                  task_number++;
+                  task_start = omp_get_wtime(); 
+                  
+                  processwork(p);
+
+                  task_end = omp_get_wtime(); 
+                  task_time = (task_end - task_start) * 1000000.0;
+                  if (task_time > max_task_time){
+                     max_task_time = task_time;
+                  }
+                  cum_task_time += task_time;
                }
                
                p = p->next;
@@ -117,6 +138,9 @@ int main(int argc, char *argv[]) {
       }
 
       gettimeofday(&tend, NULL);
+
+      mean_task_time = cum_task_time/task_number; 
+      imbalance = (max_task_time/mean_task_time - 1.0) * 100.0;
 
       p = head;
       while (p != NULL) {
@@ -130,7 +154,7 @@ int main(int argc, char *argv[]) {
       total_execution_time += (tend.tv_sec - tstart.tv_sec) + (tend.tv_usec - tstart.tv_usec) / 1000000.0;
    }
 
-   printf("linked_task,%d,%f\n",N,total_execution_time/runs);
+   printf("linked_task,%d,%f,%f\n",N,total_execution_time/runs,imbalance);
 
 
    return 0;
