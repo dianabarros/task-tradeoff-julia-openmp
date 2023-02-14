@@ -16,6 +16,37 @@ struct node {
    struct node* next;
 };
 
+void print_double_matrix(int m, double *A){
+   for(int i = 0; i < m; i++){
+      printf("%f ", A[i]);
+   } 
+   printf("\n");
+}
+
+void zero_double_matrix(int m, double *M){
+    for(int i = 0; i < m; i++){
+        M[i] = 0.0;
+    }
+}
+
+double get_mean(int m, double *M){
+   double cum_sum = 0.0;
+   for(int i = 0; i < m; i++){
+      cum_sum += M[i];
+   }
+   return cum_sum/m;
+}
+
+double get_max(int m, double *M){
+   double max = 0.0;
+   for(int i = 0; i < m; i++){
+      if(M[i] > max){
+         max = M[i];
+      }
+   }
+   return max;
+}
+
 int fib(int n) {
    int x, y;
    if (n < 2) {
@@ -76,6 +107,11 @@ int main(int argc, char *argv[]) {
 
    int N = atoi(argv[1]);
    int runs = atoi(argv[2]);
+   int N_THREADS;
+   #pragma omp parallel 
+   {
+      N_THREADS = omp_get_num_threads();
+   }
 
    double start, end;
    struct node *p=NULL;
@@ -92,17 +128,20 @@ int main(int argc, char *argv[]) {
    double task_start, task_end;
    double task_number;
    double max_task_time;
-   double cum_task_time;
    double mean_task_time;
    double task_time;
    double imbalance;
+   double task_times[N_THREADS];
+   double max_task_times[N_THREADS];
+
+   zero_double_matrix(N_THREADS,task_times);
+   zero_double_matrix(N_THREADS, max_task_times);
    for(int i=0; i<runs; i++) {
       p = init_list(N, p);
       head = p;
 
       task_number = 0.0;
       max_task_time = 0.0;
-      cum_task_time = 0.0;
 
       gettimeofday(&tstart, NULL);
       
@@ -126,10 +165,10 @@ int main(int argc, char *argv[]) {
 
                   task_end = omp_get_wtime(); 
                   task_time = (task_end - task_start) * 1000000.0;
-                  if (task_time > max_task_time){
-                     max_task_time = task_time;
+                  if (task_time > max_task_times[omp_get_thread_num()]){
+                     max_task_times[omp_get_thread_num()] = task_time;
                   }
-                  cum_task_time += task_time;
+                  task_times[omp_get_thread_num()] += task_time;
                }
                
                p = p->next;
@@ -139,7 +178,8 @@ int main(int argc, char *argv[]) {
 
       gettimeofday(&tend, NULL);
 
-      mean_task_time = cum_task_time/task_number; 
+      mean_task_time = get_mean(N_THREADS, task_times); 
+      max_task_time = get_max(N_THREADS, task_times);
       imbalance = (max_task_time/mean_task_time - 1.0) * 100.0;
 
       p = head;
