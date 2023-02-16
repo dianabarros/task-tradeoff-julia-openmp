@@ -150,11 +150,11 @@ function run_lists()
             println(now(), " - Running ", func, " function with size ", size)
             # exec_times = func(size, fib_start).times
             # mean_time = (sum(exec_times)/benchmark_samples)/1e9 #nano to seconds
-            suite = Dict(
-                "total_time" => 0.0,
-                "task_time" => zeros(Float64, nthreads())
-            )
             for _ in 1:benchmark_samples
+                suite = Dict(
+                    "total_time" => 0.0,
+                    "task_time" => zeros(Float64, nthreads())
+                )
                 func(size, fib_start, suite)
                 imbalance = calculate_imbalance(suite["task_time"])
                 push!(df, (func=string(func), size=size, n_threads=nthreads(), total_time=suite["total_time"], imbalance=imbalance))
