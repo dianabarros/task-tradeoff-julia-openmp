@@ -98,12 +98,15 @@ end
 function task_loop(p::Node, suite::Dict{T}) where T
     tmp = p
     @sync while !isnothing(tmp)
-        task_stats = @timed begin
             pp = tmp
-            Threads.@spawn processwork(pp)
+            Threads.@spawn begin
+                task_stats = @timed begin
+                    processwork(pp)
+                end
+                suite["task_time"][threadid()] += task_stats.time
+            end
             tmp = tmp.next
         end
-        suite["task_time"][threadid()] += task_stats.time
     end
 end
 
